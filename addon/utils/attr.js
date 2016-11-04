@@ -104,16 +104,24 @@ function assertDasherizedAttr(name) {
 function assertType(key, value) {
   let meta = this.constructor.metaForProperty(key);
   if (meta && meta.type && meta.type !== 'any') {
-    let msg = this.toString() + '#' + key + ' is expected to be a ' + meta.type;
+    let msg = thisDescription() + '#' + key + ' is expected to be a ' + meta.type;
     Ember.assert(msg, isType(meta.type, value));
   }
 }
 
 function immutableValue(key, value, lastValue) {
   let msg = [
-    this.toString(), '#', key, ' is not mutable set was called with ',
+    thisDescription(), '#', key, ' is not mutable set was called with ',
     '`', value, '`', ' but is previous set to `', lastValue, '`'
   ];
   Ember.Logger.warn(msg.join(''));
   return lastValue;
+}
+
+function thisDescription() {
+  if (this === undefined) {
+    return 'undefined';
+  } else {
+    return this.toString();
+  }
 }
