@@ -12,7 +12,14 @@ import Ember from 'ember';
 */
 export default Ember.Mixin.create({
 	fetchUrl: function(url) {
-    const config = this.container.lookupFactory('config:environment');
+		let config;
+
+		if (typeof Ember.getOwner === 'function') {
+			config = Ember.getOwner(this).resolveRegistration('config:environment');
+		} else {
+			config = this.container.lookupFactory('config:environment');
+		}
+		
     const proxy  = config.APP.API_HOST_PROXY;
     const host   = config.APP.API_HOST;
     if (proxy && host) {

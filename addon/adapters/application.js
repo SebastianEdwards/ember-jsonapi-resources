@@ -41,7 +41,14 @@ export default Ember.Object.extend(FetchMixin, Evented, {
   */
   url: Ember.computed('type', {
     get() {
-      const config = this.container.lookupFactory('config:environment');
+      let config;
+
+      if (typeof Ember.getOwner === 'function') {
+        config = Ember.getOwner(this).resolveRegistration('config:environment');
+      } else {
+        config = this.container.lookupFactory('config:environment');
+      }
+
       const enclosingSlashes = /^\/|\/$/g;
       const host = config.APP.API_HOST.replace(enclosingSlashes, '');
       const path = config.APP.API_PATH.replace(enclosingSlashes, '');
