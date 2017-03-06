@@ -18,13 +18,13 @@ const { getOwner, computed, Logger } = Ember;
   define a prototype using `Resource.extend({ type: entity })`. Model prototypes
   are registered in the container as factories, they use the options:
   `{ instantiate: false, singleton: false }`. So, to create a model instance
-  use the owner API method `_lookupFactory('model:name')`† then `create()`:
+  use the owner API method `factoryFor('model:name')`† then `create()`:
 
   ```js
-  let model = Ember.getOwner(this)._lookupFactory('model:entity').create({ attributes: { key: value } });
+  let model = Ember.getOwner(this).factoryFor('model:entity').create({ attributes: { key: value } });
   ```
 
-  † **Note:** eventually `factoryFor` will replace `_lookupFactory`
+  † **Note:** 'factoryFor' was introduced in Ember 2.12 and a polyfill supports older versions.
 
   See <http://jsonapi.org/format/#document-resource-objects>
 
@@ -139,7 +139,7 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
   */
   _updateRelationshipsData(relation, ids) {
     if (!Array.isArray(ids)) {
-      this._updateToOneRelationshipData(relation, ids); 
+      this._updateToOneRelationshipData(relation, ids);
     } else {
       let existing = this._existingRelationshipData(relation);
       if (!existing.length) {
@@ -178,7 +178,7 @@ const Resource = Ember.Object.extend(ResourceOperationsMixin, {
   */
   _replaceRelationshipsData(relation, ids) {
     if (!Array.isArray(ids)) {
-      this._updateToOneRelationshipData(relation, ids); 
+      this._updateToOneRelationshipData(relation, ids);
     } else {
       let existing = this._existingRelationshipData(relation);
       if (!existing.length) {
@@ -599,7 +599,7 @@ Resource.reopenClass({
     ```
     model() {
       let owner = Ember.getOwner(this);
-      return owner._lookupFactory('model:post').create({
+      return owner.factoryFor('model:post').create({
         attributes: {
           title: 'The JSON API 1.0 Spec Rocks!'
         }
@@ -650,7 +650,7 @@ Resource.reopenClass({
       } else {
         msg += '#create should only be called from a container lookup (relationships not setup), instead use: \n';
         msg += "`let owner = Ember.getOwner(this); \n";
-        msg += 'owner._lookupFactory("' + factory + '").create()`';
+        msg += 'owner.factoryFor("' + factory + '").create()`';
         Logger.warn(msg);
       }
     }

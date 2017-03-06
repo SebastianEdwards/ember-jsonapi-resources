@@ -249,7 +249,7 @@ export default Ember.Object.extend({
         json.attributes[attr] = this[transformMethod](json.attributes[attr]);
       } else {
         try {
-          factory = this._lookupFactory(json.type);
+          factory = this.factoryFor(json.type);
           meta = factory.metaForProperty(attr);
           transformMethod = transformMethodName(operation, meta.type);
           if (typeof this[transformMethod] === 'function') {
@@ -287,16 +287,16 @@ export default Ember.Object.extend({
         delete resource[prop];
       }
     }
-    return this._lookupFactory(json.type).create(resource);
+    return this.factoryFor(json.type).create(resource);
   },
 
   /**
     @private
-    @method _lookupFactory
+    @method factoryFor
     @param {String} type
     @return {Function} factory for creating resource instances
   */
-  _lookupFactory(type) {
+  factoryFor(type) {
     return Ember.getOwner(this).lookup('model:' + singularize(type));
   }
 });
