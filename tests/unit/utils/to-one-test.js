@@ -33,7 +33,7 @@ moduleFor('model:resource', 'Unit | Utility | toOne', {
 });
 
 test('toOne() helper sets up a promise proxy to a related resource', function(assert) {
-  let post = Ember.getOwner(this)._lookupFactory('model:post').create({
+  let post = Ember.getOwner(this).factoryFor('model:post').create({
     id: '1', attributes: { title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
     relationships: {
       author: {

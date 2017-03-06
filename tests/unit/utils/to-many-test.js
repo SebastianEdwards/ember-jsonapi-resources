@@ -32,7 +32,7 @@ moduleFor('model:resource', 'Unit | Utility | toMany', {
 });
 
 test('toMany() helper sets up a promise proxy to a related resource', function(assert) {
-  let author = Ember.getOwner(this)._lookupFactory('model:author').create({
+  let author = Ember.getOwner(this).factoryFor('model:author').create({
     id: '1', attributes: { name: 'pixelhandler' },
     relationships: {
       posts: {
@@ -43,7 +43,7 @@ test('toMany() helper sets up a promise proxy to a related resource', function(a
       }
     }
   });
-  Ember.getOwner(this)._lookupFactory('model:post').create({
+  Ember.getOwner(this).factoryFor('model:post').create({
     id: '2', attributes: { title: 'Wyatt Earp', excerpt: 'Was a gambler.'},
     relationships: {
       author: {
